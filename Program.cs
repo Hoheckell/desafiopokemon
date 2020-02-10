@@ -33,7 +33,7 @@ namespace pokemon
 
             var webClient = new System.Net.WebClient();
             List<string> links = new List<string>();
-            IDictionary<string, string> images = new Dictionary<string, string>();
+            Dictionary<string, string> images = new Dictionary<string, string>();
             for (int i = 1; i <= num; i++)
             {
                 string pagina = webClient.DownloadString("https://www.pokemon.com/us/pokemon-tcg/pokemon-cards/" + i + "?cardName=&cardText=&evolvesFrom=&simpleSubmit=&format=unlimited&hitPointsMin=0&hitPointsMax=300&retreatCostMin=0&retreatCostMax=5");
@@ -77,7 +77,7 @@ namespace pokemon
                     node =>
                     {
                         var t = node.ChildNodes["h1"];
-                        if (t != null)
+                        if (t != null && link != null)
                         { 
                                 Card c = new Card();
                                 c.Nome = t.InnerText;
