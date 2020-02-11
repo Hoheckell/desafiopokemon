@@ -46,10 +46,10 @@ namespace pokemon
                         var nodea = node.Element("a");
                         var img = nodea.ChildNodes[1].ChildNodes[1];
                         var t = nodea.Attributes["href"].Value;
-                        var linktxt = Base64Encode(img.Attributes["src"].Value);
+                        var linktxt = img.Attributes["src"].Value;
                         if (!images.ContainsKey(t))
                         {
-                            images[t] = linktxt;
+                            images[t] = GetImageBase64ByUrlEncode(linktxt);
                         }
                         links.Add(t);
                     });
@@ -78,7 +78,9 @@ namespace pokemon
                     {
                         var t = node.ChildNodes["h1"];
                         if (t != null && link != null)
-                        { 
+                        {
+                                
+
                                 Card c = new Card();
                                 c.Nome = t.InnerText;
                                 t = htmlDocument.DocumentNode.SelectSingleNode("//div[@class='stats-footer']/span");
@@ -86,7 +88,7 @@ namespace pokemon
                                 t = htmlDocument.DocumentNode.SelectSingleNode("//div[@class='stats-footer']/h3");
                                 c.Expansao = t.InnerText;
                                 c.Url = "https://www.pokemon.com" + link;
-                                c.Image = links.images.FirstOrDefault(x=>x.Key == link).Value;
+                                c.Image = links.images.FirstOrDefault(x => x.Key == link).Value;
                                 cardsList.Add(c); 
                         }
                     });
@@ -169,8 +171,18 @@ namespace pokemon
 
             public Links() { }
 
+        }
 
+        public static string GetImageBase64ByUrlEncode(string url)
+        {
+            var webClient = new System.Net.WebClient();
+            return System.Convert.ToBase64String(webClient.DownloadData(url));
+        }
 
+        public static byte[] GetImageBase64ByUrlDecode(string url)
+        {
+            var webClient = new System.Net.WebClient();
+            return System.Convert.FromBase64String(url);
         }
 
         public static string Base64Encode(string plainText)
@@ -184,5 +196,5 @@ namespace pokemon
             var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
             return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
-    }
+    } 
 }
